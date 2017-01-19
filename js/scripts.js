@@ -1,10 +1,10 @@
 (function($) {  
   
 	$(document).ready(function() {
-	  $('.query-editor').simpleIntellisense();
+	  $('.query-editor-container').simpleIntellisense();
 	  
 	  $('.button-section button').click(function () {
-		  $('.query-editor').simpleIntellisense('getValue');
+		  $('.query-editor-container').simpleIntellisense('getValue');
 	  });
 	});
   
