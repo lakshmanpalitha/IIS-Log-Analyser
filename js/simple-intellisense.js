@@ -1,5 +1,8 @@
 (function ($) {
-	$.fn.simpleIntellisense = function(options) {
+    var toolTip = "<div class='tip-wrapper'></div>";
+    $('body').append(toolTip);
+
+    $.fn.simpleIntellisense = function (options) {
 		
 		var settings = $.extend({
 			'hints': ['select', 'p_id', 'p_name', 'p_description'],
@@ -7,13 +10,17 @@
 		}, options);
 
 		return this.each(function() {
-			var $element = $(this);
+		    var $element = $(this);
+
+		    $('body').on('click', '.tip-wrapper div', function () {
+		        alert('ok');
+		    });
 			
 			$element.keypress( function(e) {
 				var key = String.fromCharCode(e.which);
 				var hints = getHints($element, key);
 				if (hints.length > 0) {
-					showHints(hints);
+					showHints(hints, e);
 				}
 			});
 		});
@@ -26,8 +33,21 @@
 			return settings.hints;
 		}
 		
-		function showHints(hints) {
-			alert(hints);
+		function showHints(hints, e) {
+		    var hintsList = "",
+		         hints = hints,
+		         countries = ['United States', 'Canada', 'Argentina', 'Armenia'];
+
+		    $.each(countries, function (i, value) {
+		        hintsList = hintsList + '<div class="option">' + hints[i] + '</div>';
+		    });
+
+		    $('.tip-wrapper').html(cuntryList)
+
 		}
+
+
+		
+
 	};
 })(jQuery);
