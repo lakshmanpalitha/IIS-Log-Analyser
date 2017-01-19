@@ -1,67 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using IISLogAnalyzer.Models;
 using MSUtil;
 
 namespace IISLogAnalyzer.Controllers
 {
     public class LogAnalyzerController : Controller
     {
-        // GET: LogAnalyzer
-        public ActionResult Index()
+        public ActionResult Home()
         {
             return View();
         }
-
-        //The passing argument "userID" is just the 
-        //folder name for the bandwidth used need to be retrieved.
-        //This is just for demonstration. 
-        //Re structure the SQL query for your needs.
-
-        public double ParseW3CLog(string userId)
+        // GET: LogAnalyzer
+        [HttpPost]
+        public ActionResult Index(string path, string query)
         {
+            var value = ParseW3CLog();
+            return PartialView(value);
+        }
 
-            // prepare LogParser Recordset & Record objects
-
-            double usedBw;
-
+        public DataTable ParseW3CLog()
+        {
             var logParser = new LogQueryClass();
             var w3Clog = new COMW3CInputContextClass();
+            var recordsTable = new DataTable();
+            var columns = new List<string>();
 
-            //W3C Logparsing SQL. Replace this SQL query with whatever 
-            //you want to retrieve. The example below 
-            //will sum up all the bandwidth
-            //Usage of a specific folder with name 
-            //"userID". Download Log Parser 2.2 
-            //from Microsoft and see sample queries.
+            var strSql = @"SELECT TOP 10 * FROM D:\logs\test.log";
 
-            var strSql = @"SELECT SUM(sc-bytes) from C:\\logs" +
-                         @"\\*.log WHERE cs-uri-stem LIKE '%/" +
-                         userId + "/%' ";
+            var recordSet = logParser.Execute(strSql, w3Clog);
 
-            // run the query against W3C log
-            var rsLp = logParser.Execute(strSql, w3Clog);
-
-            var rowLp = rsLp.getRecord();
-
-            if (rowLp.getValue(0).ToString() == "0" ||
-                rowLp.getValue(0).ToString() == "")
+            for (var i = 0; i < recordSet.getColumnCount(); i++)
             {
-                //Return 0 if an err occured
-                usedBw = 0;
-                return usedBw;
+                columns.Add(recordSet.getColumnName(i));
+                recordsTable.Columns.Add(recordSet.getColumnName(i));
             }
 
-            //Bytes to MB Conversion
-            double bytes = Convert.ToDouble(rowLp.getValue(0).ToString());
-            usedBw = bytes / (1024 * 1024);
+            for (; !recordSet.atEnd(); recordSet.moveNext())
+            {
+                var row = recordSet.getRecord();
 
-            //Round to 3 decimal places
-            usedBw = Math.Round(usedBw, 3);
+                var newTableRow = recordsTable.NewRow();
 
-            return usedBw;
+                foreach (var column in columns)
+                {
+                    newTableRow[column] = row.getValue(column)?.ToString();
+                }
+
+                recordsTable.Rows.Add(newTableRow);
+            }
+            return recordsTable;
         }
     }
 }

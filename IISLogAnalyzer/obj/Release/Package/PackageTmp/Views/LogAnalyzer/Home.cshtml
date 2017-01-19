@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Home";
+}
+
+<h2>Log analyzer</h2>
+
+<div>
+    <label>Log file path :</label>
+    <input type="text" id="txtLogFilePath" />
+</div>
+<br />
+<div>
+    <label>Query :</label>
+    <input type="text" id="txtQuery" />
+</div>
+<br />
+<div>
+    <input type="button" id="btnQuery" value="Process"/>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnQuery").click(function () {
+
+            var path = $("#txtLogFilePath").val();
+            var query = $("#txtQuery").val();
+
+            $.ajax({
+                type: 'GET',
+                url: "LogAnalyzer/Index",
+                data: { path: path, query: query }
+            });
+        });
+    });
+</script>
+
+
+

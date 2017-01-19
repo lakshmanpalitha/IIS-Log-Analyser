@@ -16,7 +16,7 @@ namespace IISLogAnalyzer
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "LogAnalyzer", action = "Home", id = UrlParameter.Optional }
             );
         }
     }
