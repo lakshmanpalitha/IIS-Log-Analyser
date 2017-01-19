@@ -1,6 +1,10 @@
 (function ($) {
 	$.fn.simpleIntellisense = function(options) {
 		
+		if (options != null && options == "getValue") {
+			alert(this.text());
+		}
+		
 		var settings = $.extend({
 			'hints': ['select', 'p_id', 'p_name', 'p_description'],
 			'ignoreKeyCodes': [13]
