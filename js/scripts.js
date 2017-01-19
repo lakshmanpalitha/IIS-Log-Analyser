@@ -1,8 +1,7 @@
-(function($) {
+(function($) {  
   
-  
-	$( document ).ready(function() {
-	  
+	$(document).ready(function() {
+	  $('.query-editor').simpleIntellisense();
 	});
   
 })(jQuery);
