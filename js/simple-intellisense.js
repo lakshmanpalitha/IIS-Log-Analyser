@@ -2,7 +2,12 @@
 (function ($) {
     $.fn.simpleIntellisense = function (options) {
 
-        var toolTip = "<div class='tip-wrapper'></div>";
+        var editor = $('.query-editor'),
+            editorWidth = editor.outerWidth,
+            editorleft = editor.position().left,
+            editorTop = editor.position().top,
+            toolTipLeft = editorleft + editorWidth;
+            toolTip = '<div class="tip-wrapper" style="left:'+toolTipLeft+'px; top:'+editorTop+'px"></div>';
         $('body').append(toolTip);
 
         var settings = $.extend({
@@ -92,11 +97,15 @@
 
         function showHints(hints) {
             var hintsList = "";
+                
+
             $.each(hints, function (i, value) {
                 hintsList = hintsList + '<div class="option">' + hints[i] + '</div>';
             });
 
             $('.tip-wrapper').html(hintsList);
+
+            
         }
 
         function replaceWord(word) {
