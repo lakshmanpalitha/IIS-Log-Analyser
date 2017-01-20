@@ -27,3 +27,6 @@ td { background: #FFFFFF; padding: 10px; text-align: left; vertical-align: middl
 td:last-child { border-right: 0; }
 .tip-wrapper { position: absolute; top: 50px; left: 50px; border: solid 1px #c1c3d1; border-top: none; width: 200px; }
 .tip-wrapper div { border-top: solid 1px #c1c3d1; padding: 5px; font-size: 12px; cursor: pointer; }
+input, select {
+   padding: 10px; border: solid 2px #6496c8;
+}
