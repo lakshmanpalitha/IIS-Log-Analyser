@@ -1,2 +1,6 @@
 bin
 obj
+.nuget
+packages
+*.suo
+.vs
