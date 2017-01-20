@@ -32,7 +32,7 @@ namespace IISLogAnalyzer.Controllers
         public ActionResult Index(string path, string query, string logType, int numberOfExistingRecords)
         {
             var resultsModel = new AnalyzerResultModel();
-            var recordsToRetrive = 10;
+            var recordsToRetrive = GetPageRecordCount();
 
             try
             {
@@ -42,12 +42,12 @@ namespace IISLogAnalyzer.Controllers
 
                 var resultsTable = ParseW3CLog(path, query, logType);
 
-                if (resultsTable.Rows.Count <= numberOfExistingRecords)
+                if (recordsToRetrive < 0 || resultsTable.Rows.Count <= numberOfExistingRecords)
                 {
                     resultsModel.ResultsTable = resultsTable;
                     resultsModel.NumberOfExistingRecords = resultsTable.Rows.Count;
                 }
-                else
+                else 
                 {
                     resultsModel.ResultsTable = resultsTable.Rows.Cast<DataRow>().Skip(numberOfExistingRecords).Take(recordsToRetrive).CopyToDataTable();
                     resultsModel.NumberOfExistingRecords = numberOfExistingRecords + recordsToRetrive;
@@ -64,6 +64,18 @@ namespace IISLogAnalyzer.Controllers
                 resultsModel.ErrorMessage = ex.Message;
             }
             return PartialView(resultsModel);
+        }
+
+        public int GetPageRecordCount()
+        {
+            var pageRecordCount = System.Configuration.ConfigurationManager.AppSettings["ResultRecordCount"];
+            int count;
+            if (int.TryParse(pageRecordCount, out count))
+            {
+                return count;    
+            }
+            return -1;
+            
         }
 
         public DataTable ParseW3CLog(string path, string query, string logType)
