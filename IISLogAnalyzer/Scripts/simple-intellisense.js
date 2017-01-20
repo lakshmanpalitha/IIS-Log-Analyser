@@ -24,7 +24,7 @@
                 $(this).parent('.tip-wrapper').empty().hide();
             });
 
-            $this.append('<textarea class="query-editor"></textarea>')
+            $this.append('<textarea class="query-editor"></textarea>');
             var $element = $('.query-editor', $this);
             $element.keypress(function (e) {
                 if ($.inArray(e.keyCode, settings.ignoreKeyCodes) > -1) {
@@ -60,15 +60,9 @@
                     var term = queryUptoCaret.substring(length, caretPosition) + key;
                     return term;
                 }
-                else {
-                    replaceWordStartIndex = queryUptoCaret.length;
-                    return key;
-                }
             }
-            else {
-                replaceWordStartIndex = 0;
-                return key;
-            }
+
+            return key;
         }
 
         function getHints($element, key) {
@@ -76,6 +70,7 @@
             var hints = $.grep(settings.hints, function (item, i) {
                 return item.toLowerCase().startsWith(term.toLowerCase());
             });
+
             return hints;
         }
 
