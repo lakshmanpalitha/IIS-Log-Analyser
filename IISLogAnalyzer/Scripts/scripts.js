@@ -5,9 +5,11 @@
 
         $("#btnQuery").click(function () {
 
-            var path = $("#txtLogFilePath").val();
-            var query = $('.query-editor-container').simpleIntellisense('getValue');
-            var logType = $("#dropLogType").val();
+            var path = $("#txtLogFilePath").val(),
+                query = $('.query-editor-container').simpleIntellisense('getValue'),
+                logType = $("#dropLogType").val(),
+                $loader = $('.loading');
+           $loader.show();
 
 	        $.ajax({
 	            type: 'POST',
@@ -15,6 +17,7 @@
 	            data: { path: path, query: query, logType: logType},
 	            success: function (data) {
 	                $("#results").html(data);
+	                $loader.show();
 	            }
 	        });
 	    });

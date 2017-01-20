@@ -10,7 +10,7 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; padding: 0; border: 0; font-size: 100%; f
 .button-section button { font-size: 30px; min-width: 100px; border: solid 1px; color: #fff; background-color: #6496c8; text-shadow: -1px 1px #417cb8; border: none; }
 button { display: inline-block; margin: 0 10px 0 0; padding: 15px 45px; font-family: "Bitter", Arial, "Helvetica Neue", Helvetica, sans-serif; vertical-align: bottom; -webkit-appearance: none; -moz-appearance: none; appearance: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; cursor: pointer; }
 button:hover { background-color: #346392; text-shadow: -1px 1px #27496d; }
-.data-table { padding: 10px 0; margin-top: 30px; }
+.data-table { padding: 10px 0; margin-top: 30px; overflow-x: auto; }
 .data-table table { background: white; border-radius: 3px; border-collapse: collapse; height: 320px; margin: auto; max-width: 600px; padding: 5px; width: 100%; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); animation: float 5s infinite; }
 .data-table table th { color: #D5DDE5;; background: #346392; border-bottom: 4px solid #27496d; border-right: 1px solid #27496d; font-size: 16px; font-weight: 100; padding: 24px; text-align: left; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); vertical-align: middle; }
 .data-table table th:first-child { border-top-left-radius: 3px; }
@@ -27,7 +27,6 @@ td { background: #FFFFFF; padding: 10px; text-align: left; vertical-align: middl
 td:last-child { border-right: 0; }
 .tip-wrapper { position: absolute; top: 50px; left: 50px; border: solid 1px #c1c3d1; border-top: none; width: 200px; }
 .tip-wrapper div { border-top: solid 1px #c1c3d1; padding: 5px; font-size: 12px; cursor: pointer; }
-input, select {
-   padding: 10px; border: solid 2px #6496c8;
-}
-.form-block{margin-top: 10px;}
+input, select { padding: 10px; border: solid 2px #6496c8; }
+.form-block { margin-top: 10px; }
+.loading { display: none; }
