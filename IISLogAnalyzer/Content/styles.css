@@ -30,3 +30,4 @@ td:last-child { border-right: 0; }
 input, select {
    padding: 10px; border: solid 2px #6496c8;
 }
+.form-block{margin-top: 10px;}
