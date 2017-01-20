@@ -11,6 +11,13 @@ using MSUtil;
 
 namespace IISLogAnalyzer.Controllers
 {
+    public class AnalyzerResultModel
+    {
+        public DataTable ResultsTable = new DataTable();
+        public bool Error;
+        public string ErrorMessage;
+    }
+
     public class LogAnalyzerController : Controller
     {
 
@@ -19,11 +26,20 @@ namespace IISLogAnalyzer.Controllers
         {
             return View();
         }
+
         // GET: LogAnalyzer
         [HttpPost]
         public ActionResult Index(string path, string query, string logType)
         {
-            var value = ParseW3CLog(path,query,logType);
+            //try
+            //{
+            //    var value = ParseW3CLog(path, query, logType);
+            //}
+            //catch (Exception)
+            //{
+                
+            //}
+            var value = ParseW3CLog(path, query, logType);
             return PartialView(value);
         }
 

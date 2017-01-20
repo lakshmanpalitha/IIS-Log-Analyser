@@ -40,9 +40,6 @@ D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\System.Web.Webpages.Deployment.x
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\System.Web.Webpages.Razor.xml
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\System.Web.Helpers.xml
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\System.Web.Mvc.xml
-D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\obj\Debug\Interop.MSUtil.dll
-D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\obj\Debug\IISLogAnalyzer.csproj.ResolveComReference.cache
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\obj\Debug\IISLogAnalyzer.dll
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\obj\Debug\IISLogAnalyzer.pdb
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\Microsoft.Web.Infrastructure.dll
-D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\obj\Debug\IISLogAnalyzer.csprojResolveAssemblyReference.cache
