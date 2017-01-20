@@ -1,22 +1,31 @@
-﻿@model System.Data.DataTable
+﻿@model IISLogAnalyzer.Controllers.AnalyzerResultModel
 
 <div class="title">
     <h1>
         Result
     </h1>
 </div>
-<div class="data-table">
-    <table>
-        <thead>
+@if (Model.Error)
+{
+    <div class="error">
+        @Model.ErrorMessage
+    </div>
+}
+else
+{
+    <div class="data-table">
+        <div>@Model.TimeTaken</div>
+        <table>
+            <thead>
             <tr>
-                @foreach (System.Data.DataColumn col in Model.Columns)
+                @foreach (System.Data.DataColumn col in Model.ResultsTable.Columns)
                 {
                     <th>@col.Caption</th>
                 }
             </tr>
-        </thead>
-        <tbody class="table-hover">
-            @foreach (System.Data.DataRow row in Model.Rows)
+            </thead>
+            <tbody class="table-hover">
+            @foreach (System.Data.DataRow row in Model.ResultsTable.Rows)
             {
                 <tr>
                     @foreach (var cell in row.ItemArray)
@@ -25,6 +34,7 @@
                     }
                 </tr>
             }
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
+}
