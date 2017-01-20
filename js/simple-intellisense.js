@@ -101,8 +101,8 @@
 				}
 				start--;
 			}
-			var end = start;
-			for (index = start; index < query.length; index++) {
+			var end = queryUptoCaret.length;
+			for (index = queryUptoCaret.length; index < query.length; index++) {
 				if (query[index] == ' ') {							
 					break;
 				}
@@ -116,7 +116,7 @@
 			}
 			q = q + word;
 			if (end > start) {
-				q = q + ' ' + query.substring(end, max);
+				q = q + query.substring(end, max);
 			}
 			$element.val(q);
         }
