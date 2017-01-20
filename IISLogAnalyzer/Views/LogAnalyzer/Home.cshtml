@@ -1,48 +1,25 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Home";
 }
 
-<h2>Log analyzer</h2>
+<div class="wrapper">
+    <div class="query-editor-holder">
+        <div class="title">
+            <h1>Query</h1>
+        </div>
+        <input type="text" id="txtQuery" class="query-editor" contenteditable="true" />
+        <div class="title">
+            <h1>File Path</h1>
+        </div>
+        <input type="text" class="" id="txtLogFilePath" />
 
-<div>
-    <label>Log file path :</label>
-    <input type="text" id="txtLogFilePath" />
+        <div class="button-section">
+            <button id="btnQuery" class="run-query" type="button">Run</button>
+        </div>
+    </div>
+    <div id="results" class="query-result-holder">
+
+    </div>
 </div>
-<br />
-<div>
-    <label>Query :</label>
-    <input type="text" id="txtQuery" />
-</div>
-<br />
-<div>
-    <input type="button" id="btnQuery" value="Process" />
-</div>
-<br />
-<div id="results">
-    
-</div>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#results").html('');
-
-        $("#btnQuery").click(function () {
-
-            var path = $("#txtLogFilePath").val();
-            var query = $("#txtQuery").val();
-
-            $.ajax({
-                type: 'POST',
-                url: "LogAnalyzer/Index",
-                data: { path: path, query: query },
-                success: function(data) {
-                    $("#results").html(data);
-                }
-            });
-        });
-    });
-</script>
-
 
 
