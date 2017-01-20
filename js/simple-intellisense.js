@@ -12,17 +12,17 @@
 			'ignoreKeyCodes': [13, 32]
 		}, options);
 
-        var toolTip = "<div class='tip-wrapper'></div>";
-        $('body').append(toolTip);
-		
-		var position = 0;
+		var toolTip = '<div class="tip-wrapper" style="display:none;"></div>';
+		$('body').append(toolTip);
 
+		var position = 0;
         return this.each(function () {
             var $this = $(this);
 
             $('body').on('click', '.tip-wrapper div', function () {
                 var suggestion = $(this)[0].innerHTML;
                 replaceWord(suggestion, $element);
+                $(this).parent('.tip-wrapper').empty().hide();
             });
 			
 			$this.append('<textarea class="query-editor"></textarea>')
@@ -34,7 +34,7 @@
                 var key = String.fromCharCode(e.which);
                 var hints = getHints($element, key);
                 if (hints.length > 0) {
-                    showHints(hints);
+                    showHints(hints, $element);
                 }
             });
         });
@@ -80,13 +80,18 @@
             return hints;
         }
 
-        function showHints(hints) {
+        function showHints(hints, $element) {
+            var editorWidth = $element.outerWidth(),
+                editorleft = $element.position().left,
+                editorTop = $element.position().top,
+                toolTipLeft = editorleft + editorWidth;
+            
             var hintsList = "";
             $.each(hints, function (i, value) {
                 hintsList = hintsList + '<div class="option">' + hints[i] + '</div>';
             });
 
-            $('.tip-wrapper').html(hintsList);
+            $('.tip-wrapper').css({ 'left': toolTipLeft, 'top': editorTop, 'display':'block' }).html(hintsList);
         }
 
         function replaceWord(word, $element) {
