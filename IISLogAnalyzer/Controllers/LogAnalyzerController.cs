@@ -2,13 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Dynamic;
 using System.Linq;
-using System.Timers;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
-using IISLogAnalyzer.Models;
 using MSUtil;
 
 namespace IISLogAnalyzer.Controllers
@@ -33,16 +28,24 @@ namespace IISLogAnalyzer.Controllers
 
         // GET: LogAnalyzer
         [HttpPost]
-        public ActionResult Index(string path, string query, string logType)
+        public ActionResult Index(string path, string query, string logType, int numberOfRecords)
         {
             var resultsModel = new AnalyzerResultModel();
+            var recordsToRetrive = 10;
             var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
+
             try
             {
                 var stopWatch = new Stopwatch();
 
                 stopWatch.Start();
-                resultsModel.ResultsTable = ParseW3CLog(logFilePath, query, logType);
+                var resultsTable = ParseW3CLog(logFilePath, query, logType);
+                if (numberOfRecords > 0)
+                {
+                    recordsToRetrive = numberOfRecords + recordsToRetrive;
+                    resultsModel.ResultsTable = resultsTable.Rows.Cast<DataRow>().Skip(numberOfRecords).Take(recordsToRetrive).CopyToDataTable();
+                }
+                resultsModel.ResultsTable = resultsTable.Rows.Cast<DataRow>().Skip(numberOfRecords).Take(recordsToRetrive).CopyToDataTable();
                 stopWatch.Stop();
 
                 var ts = stopWatch.Elapsed;
