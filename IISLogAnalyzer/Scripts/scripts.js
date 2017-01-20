@@ -11,7 +11,7 @@
 
 	        $.ajax({
 	            type: 'POST',
-	            url: "LogAnalyzer/Index",
+	            url: "/LogAnalyzer/Index",
 	            data: { path: path, query: query, logType: logType},
 	            success: function (data) {
 	                $("#results").html(data);
