@@ -33,14 +33,14 @@ namespace IISLogAnalyzer.Controllers
         {
             var resultsModel = new AnalyzerResultModel();
             var recordsToRetrive = GetPageRecordCount();
+            var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
 
             try
             {
                 var stopWatch = new Stopwatch();
 
                 stopWatch.Start();
-
-                var resultsTable = ParseW3CLog(path, query, logType);
+                var resultsTable = ParseW3CLog(logFilePath, query, logType);
 
                 if (recordsToRetrive < 0 || resultsTable.Rows.Count <= numberOfExistingRecords)
                 {
@@ -55,7 +55,7 @@ namespace IISLogAnalyzer.Controllers
 
                 stopWatch.Stop();
 
-                TimeSpan ts = stopWatch.Elapsed;
+                var ts = stopWatch.Elapsed;
                 resultsModel.TimeTaken = $"Execution time :{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
             }
             catch (Exception ex)
