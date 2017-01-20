@@ -13,28 +13,30 @@ namespace IISLogAnalyzer.Controllers
 {
     public class LogAnalyzerController : Controller
     {
+
+
         public ActionResult Home()
         {
             return View();
         }
         // GET: LogAnalyzer
         [HttpPost]
-        public ActionResult Index(string path, string query)
+        public ActionResult Index(string path, string query, string logType)
         {
-            var value = ParseW3CLog();
+            var value = ParseW3CLog(path,query,logType);
             return PartialView(value);
         }
 
-        public DataTable ParseW3CLog()
+        public DataTable ParseW3CLog(string path, string query, string logType)
         {
             var logParser = new LogQueryClass();
-            var w3Clog = new COMW3CInputContextClass();
+
             var recordsTable = new DataTable();
             var columns = new List<string>();
 
-            var strSql = @"SELECT TOP 10 * FROM D:\logs\test.log";
+            var strSql = BuildQuery(path, query);
 
-            var recordSet = logParser.Execute(strSql, w3Clog);
+            var recordSet = logParser.Execute(strSql, GetLogTypeClass(logType));
 
             for (var i = 0; i < recordSet.getColumnCount(); i++)
             {
@@ -56,6 +58,53 @@ namespace IISLogAnalyzer.Controllers
                 recordsTable.Rows.Add(newTableRow);
             }
             return recordsTable;
+        }
+
+        public string BuildQuery(string path, string query,string toDate = "", string fromDate = "")
+        {
+            var finalQuery = string.Empty;
+
+            if (string.IsNullOrEmpty(query))
+            {
+                throw new Exception("Please provide the query");
+            }
+
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new Exception("Please provide log file path");
+            }
+
+            finalQuery = query.Replace("{path}", path);
+
+            if (!string.IsNullOrEmpty(toDate))
+            {
+                
+            }
+
+            if (!string.IsNullOrEmpty(fromDate))
+            {
+
+            }
+
+            return finalQuery;
+        }
+
+        public object GetLogTypeClass(string logType)
+        {
+            object logTypeClass;
+            switch (logType)
+            {
+                case "W3CLOG":
+                    logTypeClass = new COMW3CInputContextClass();
+                    break;
+                case "IISLOG":
+                    logTypeClass = new COMIISIISInputContextClass();
+                    break;
+                default:
+                    logTypeClass = new COMW3CInputContextClass();
+                    break;
+            }
+            return logTypeClass;
         }
     }
 }

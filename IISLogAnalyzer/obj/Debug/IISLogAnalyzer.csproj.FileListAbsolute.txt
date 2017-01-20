@@ -44,6 +44,7 @@ D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\obj\Debug\Interop.MSUtil.dll
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\obj\Debug\IISLogAnalyzer.csproj.ResolveComReference.cache
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\obj\Debug\IISLogAnalyzer.dll
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\obj\Debug\IISLogAnalyzer.pdb
+D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\Microsoft.Web.Infrastructure.dll
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\obj\Debug\IISLogAnalyzer.csprojResolveAssemblyReference.cache
 E:\Hack Day Work\2017-01-17\IIS-Log-Analyser\IISLogAnalyzer\bin\ApplicationInsights.config
 E:\Hack Day Work\2017-01-17\IIS-Log-Analyser\IISLogAnalyzer\bin\roslyn\csc.exe

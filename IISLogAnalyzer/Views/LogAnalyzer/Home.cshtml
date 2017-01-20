@@ -7,11 +7,15 @@
         <div class="title">
             <h1>Query</h1>
         </div>
-        <input type="text" id="txtQuery" class="query-editor" contenteditable="true" />
+        <input type="text" id="txtQuery" class="query-editor" contenteditable="true" value="SELECT TOP 10 * FROM {path}" />
         <div class="title">
             <h1>File Path</h1>
         </div>
-        <input type="text" class="" id="txtLogFilePath" />
+        <input type="text" class="" id="txtLogFilePath" value="D:\logs\test.log" />
+        <select id="dropLogType">
+            <option value="W3LOG" >W3LOG</option>
+            <option value="IISLOG">IISLOG</option>
+        </select>
 
         <div class="button-section">
             <button id="btnQuery" class="run-query" type="button">Run</button>
