@@ -25,16 +25,16 @@
             var query = $("#txtQuery").val();
             var logType = $("#dropLogType").val();
 
-            $.ajax({
-                type: 'POST',
-                url: "Index",
-                data: { path: path, query: query, logType: logType },
-                success: function (data) {
-                    $("#results").html(data);
-                }
-            });
-        });
-    });
+	        $.ajax({
+	            type: 'POST',
+	            url: "LogAnalyzer/Index",
+	            data: { path: path, query: query },
+	            success: function (data) {
+	                $("#results").html(data);
+	            }
+	        });
+	    });
+	});
 
 
 })(jQuery);
