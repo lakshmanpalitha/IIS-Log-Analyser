@@ -22,7 +22,6 @@ D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\Microsoft.AI.Web.dll
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\Microsoft.AI.WindowsServer.dll
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\Microsoft.ApplicationInsights.dll
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
-D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\Microsoft.Web.Infrastructure.dll
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\System.Web.Helpers.dll
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\System.Web.Mvc.dll
 D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\bin\System.Web.Razor.dll
