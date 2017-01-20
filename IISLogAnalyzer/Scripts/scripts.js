@@ -14,7 +14,7 @@
 	        $.ajax({
 	            type: 'POST',
 	            url: "/LogAnalyzer/Index",
-	            data: { path: 'D:\\logs\\test.log', query: query, logType: logType, numberOfRecords: 10},
+	            data: { path: 'D:\\logs\\test.log', query: query, logType: logType, numberOfExistingRecords: 0 },
 	            success: function (data) {
 	                $("#results").html(data);
 	                $loader.show();

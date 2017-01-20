@@ -14,6 +14,7 @@ namespace IISLogAnalyzer.Controllers
         public bool Error;
         public string ErrorMessage;
         public string TimeTaken;
+        public int NumberOfExistingRecords;
 
     }
 
@@ -28,7 +29,7 @@ namespace IISLogAnalyzer.Controllers
 
         // GET: LogAnalyzer
         [HttpPost]
-        public ActionResult Index(string path, string query, string logType, int numberOfRecords)
+        public ActionResult Index(string path, string query, string logType, int numberOfExistingRecords)
         {
             var resultsModel = new AnalyzerResultModel();
             var recordsToRetrive = 10;
@@ -38,13 +39,20 @@ namespace IISLogAnalyzer.Controllers
                 var stopWatch = new Stopwatch();
 
                 stopWatch.Start();
+
                 var resultsTable = ParseW3CLog(path, query, logType);
-                if (numberOfRecords > 0)
+
+                if (resultsTable.Rows.Count <= numberOfExistingRecords)
                 {
-                    recordsToRetrive = numberOfRecords + recordsToRetrive;
-                    resultsModel.ResultsTable = resultsTable.Rows.Cast<DataRow>().Skip(numberOfRecords).Take(recordsToRetrive).CopyToDataTable();
+                    resultsModel.ResultsTable = resultsTable;
+                    resultsModel.NumberOfExistingRecords = resultsTable.Rows.Count;
                 }
-                resultsModel.ResultsTable = resultsTable.Rows.Cast<DataRow>().Skip(numberOfRecords).Take(recordsToRetrive).CopyToDataTable();
+                else
+                {
+                    resultsModel.ResultsTable = resultsTable.Rows.Cast<DataRow>().Skip(numberOfExistingRecords).Take(recordsToRetrive).CopyToDataTable();
+                    resultsModel.NumberOfExistingRecords = numberOfExistingRecords + recordsToRetrive;
+                }
+
                 stopWatch.Stop();
 
                 TimeSpan ts = stopWatch.Elapsed;
