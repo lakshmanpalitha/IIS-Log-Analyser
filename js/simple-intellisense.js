@@ -8,8 +8,8 @@
 		}
 		
 		var settings = $.extend({
-			'hints': ['select', 'p_id', 'p_name', 'p_description'],
-			'ignoreKeyCodes': [13, 32]
+		    'hints': ['SELECT', 'FROM', 'WHERE', 'Date', 'Time', 's-ip', 'c-ip', 'cs-uri-stem', 'cs-uri-query', 'cs-method', 's-port', 'cs-username', 'cs(User-Agent)', 'sc-status', 'sc-substatus', 'sc-win32-status'],
+		    'ignoreKeyCodes': [13, 32]
 		}, options);
 
 		var toolTip = '<div class="tip-wrapper" style="display:none;"></div>';
@@ -95,35 +95,35 @@
         }
 
         function replaceWord(word, $element) {
-			var caretPosition = position + 1;	
+            var caretPosition = position + 1;
             var query = getText($element);
-			var queryUptoCaret = query.substring(0, caretPosition);
-			var start = queryUptoCaret.length;
-			var index;
-			for (index = queryUptoCaret.length; index > 0; index--) {
-				if (queryUptoCaret[index] == ' ') {							
-					break;
-				}
-				start--;
-			}
-			var end = start;
-			for (index = start; index < query.length; index++) {
-				if (query[index] == ' ') {							
-					break;
-				}
-				end++;
-			}
-			
-			var max = query.length;
-			var q = query.substring(0, start);
-			if (start > 0) {
-				q = q + ' ';
-			}
-			q = q + word;
-			if (end > start) {
-				q = q + ' ' + query.substring(end, max);
-			}
-			$element.val(q);
+            var queryUptoCaret = query.substring(0, caretPosition);
+            var start = queryUptoCaret.length;
+            var index;
+            for (index = queryUptoCaret.length; index > 0; index--) {
+                if (queryUptoCaret[index] == ' ') {
+                    break;
+                }
+                start--;
+            }
+            var end = queryUptoCaret.length;
+            for (index = queryUptoCaret.length; index < query.length; index++) {
+                if (query[index] == ' ') {
+                    break;
+                }
+                end++;
+            }
+
+            var max = query.length;
+            var q = query.substring(0, start);
+            if (start > 0) {
+                q = q + ' ';
+            }
+            q = q + word;
+            if (end > start) {
+                q = q + query.substring(end, max);
+            }
+            $element.val(q);
         }
     };
 })(jQuery);
