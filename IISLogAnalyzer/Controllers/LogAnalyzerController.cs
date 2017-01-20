@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
+using System.Timers;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -16,6 +18,8 @@ namespace IISLogAnalyzer.Controllers
         public DataTable ResultsTable = new DataTable();
         public bool Error;
         public string ErrorMessage;
+        public string TimeTaken;
+
     }
 
     public class LogAnalyzerController : Controller
@@ -31,16 +35,25 @@ namespace IISLogAnalyzer.Controllers
         [HttpPost]
         public ActionResult Index(string path, string query, string logType)
         {
-            //try
-            //{
-            //    var value = ParseW3CLog(path, query, logType);
-            //}
-            //catch (Exception)
-            //{
-                
-            //}
-            var value = ParseW3CLog(path, query, logType);
-            return PartialView(value);
+            var resultsModel = new AnalyzerResultModel();
+
+            try
+            {
+                var stopWatch = new Stopwatch();
+
+                stopWatch.Start();
+                resultsModel.ResultsTable = ParseW3CLog(path, query, logType);
+                stopWatch.Stop();
+
+                TimeSpan ts = stopWatch.Elapsed;
+                resultsModel.TimeTaken = $"Execution time :{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
+            }
+            catch (Exception ex)
+            {
+                resultsModel.Error = true;
+                resultsModel.ErrorMessage = ex.Message;
+            }
+            return PartialView(resultsModel);
         }
 
         public DataTable ParseW3CLog(string path, string query, string logType)
@@ -56,8 +69,9 @@ namespace IISLogAnalyzer.Controllers
 
             for (var i = 0; i < recordSet.getColumnCount(); i++)
             {
-                columns.Add(recordSet.getColumnName(i));
-                recordsTable.Columns.Add(recordSet.getColumnName(i));
+                var columnName = recordSet.getColumnName(i);
+                columns.Add(columnName);
+                recordsTable.Columns.Add(columnName);
             }
 
             for (; !recordSet.atEnd(); recordSet.moveNext())
@@ -76,7 +90,7 @@ namespace IISLogAnalyzer.Controllers
             return recordsTable;
         }
 
-        public string BuildQuery(string path, string query,string toDate = "", string fromDate = "")
+        public string BuildQuery(string path, string query, string toDate = "", string fromDate = "")
         {
             var finalQuery = string.Empty;
 
@@ -94,7 +108,7 @@ namespace IISLogAnalyzer.Controllers
 
             if (!string.IsNullOrEmpty(toDate))
             {
-                
+
             }
 
             if (!string.IsNullOrEmpty(fromDate))
