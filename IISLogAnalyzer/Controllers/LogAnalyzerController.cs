@@ -36,16 +36,16 @@ namespace IISLogAnalyzer.Controllers
         public ActionResult Index(string path, string query, string logType)
         {
             var resultsModel = new AnalyzerResultModel();
-
+            var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
             try
             {
                 var stopWatch = new Stopwatch();
 
                 stopWatch.Start();
-                resultsModel.ResultsTable = ParseW3CLog(path, query, logType);
+                resultsModel.ResultsTable = ParseW3CLog(logFilePath, query, logType);
                 stopWatch.Stop();
 
-                TimeSpan ts = stopWatch.Elapsed;
+                var ts = stopWatch.Elapsed;
                 resultsModel.TimeTaken = $"Execution time :{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
             }
             catch (Exception ex)
