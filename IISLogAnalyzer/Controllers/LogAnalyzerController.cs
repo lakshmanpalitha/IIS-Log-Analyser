@@ -29,7 +29,7 @@ namespace IISLogAnalyzer.Controllers
 
         // GET: LogAnalyzer
         [HttpPost]
-        public ActionResult Index(string path, string query, string logType, int numberOfExistingRecords)
+        public ActionResult Index(string query, string logType, int numberOfExistingRecords)
         {
             var resultsModel = new AnalyzerResultModel();
             var recordsToRetrive = GetPageRecordCount();
