@@ -22,6 +22,7 @@
                 var suggestion = $(this)[0].innerHTML;
                 replaceWord(suggestion, $element);
                 $(this).parent('.tip-wrapper').empty().hide();
+                $element.focus();
             });
 
             $this.append('<textarea class="query-editor"></textarea>');
