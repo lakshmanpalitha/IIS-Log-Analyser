@@ -8,7 +8,7 @@
 		}
 		
 		var settings = $.extend({
-			'hints': ['select', 'p_id', 'p_name', 'p_description'],
+			'hints': ['SELECT', 'FROM', 'WHERE', 'Date', 'Time', 's-ip', 'c-ip', 'cs-uri-stem', 'cs-uri-query', 'cs-method', 's-port', 'cs-username', 'cs(User-Agent)', 'sc-status', 'sc-substatus', 'sc-win32-status' ],
 			'ignoreKeyCodes': [13, 32]
 		}, options);
 
