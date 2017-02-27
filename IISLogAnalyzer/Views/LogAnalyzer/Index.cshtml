@@ -2,7 +2,7 @@
 
 <div class="title">
     <h1>
-        Result
+        Results
     </h1>
 </div>
 @if (Model.Error)
@@ -17,24 +17,25 @@ else
         <div>@Model.TimeTaken</div>
         <table>
             <thead>
-            <tr>
-                @foreach (System.Data.DataColumn col in Model.ResultsTable.Columns)
-                {
-                    <th>@col.Caption</th>
-                }
-            </tr>
-            </thead>
-            <tbody class="table-hover">
-            @foreach (System.Data.DataRow row in Model.ResultsTable.Rows)
-            {
                 <tr>
-                    @foreach (var cell in row.ItemArray)
+                    @foreach (System.Data.DataColumn col in Model.ResultsTable.Columns)
                     {
-                        <td>@cell.ToString()</td>
+                        <th>@col.Caption</th>
                     }
                 </tr>
-            }
+            </thead>
+            <tbody class="table-hover">
+                @foreach (System.Data.DataRow row in Model.ResultsTable.Rows)
+                {
+                    <tr>
+                        @foreach (var cell in row.ItemArray)
+                        {
+                            <td>@cell.ToString()</td>
+                        }
+                    </tr>
+                }
             </tbody>
         </table>
+        <div id="numberOfExistingRecords">@Model.NumberOfExistingRecords</div>
     </div>
 }
