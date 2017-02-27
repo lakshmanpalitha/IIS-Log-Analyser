@@ -42,7 +42,8 @@ namespace IISLogAnalyzer.Controllers
                 if (numberOfRecords > 0)
                 {
                     recordsToRetrive = numberOfRecords + recordsToRetrive;
-                    resultsModel.ResultsTable = resultsTable.Rows.Cast<DataRow>().Skip(numberOfRecords).Take(recordsToRetrive).CopyToDataTable();
+                    resultsModel.ResultsTable =
+                        resultsTable.Rows.Cast<DataRow>().Skip(numberOfRecords).Take(recordsToRetrive).CopyToDataTable();
                 }
                 resultsModel.ResultsTable = resultsTable.Rows.Cast<DataRow>().Skip(numberOfRecords).Take(recordsToRetrive).CopyToDataTable();
                 stopWatch.Stop();
