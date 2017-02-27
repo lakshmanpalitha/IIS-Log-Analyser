@@ -114,7 +114,7 @@ namespace IISLogAnalyzer.Controllers
 
         public string BuildQuery(string path, string query, string toDate = "", string fromDate = "")
         {
-            var finalQuery = string.Empty;
+            string finalQuery;
 
             if (string.IsNullOrEmpty(query))
             {
