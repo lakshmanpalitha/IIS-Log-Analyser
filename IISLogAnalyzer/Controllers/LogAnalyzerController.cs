@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using MSUtil;
+using Microsoft.Web.Administration;
+using System.IO;
 
 namespace IISLogAnalyzer.Controllers
 {
@@ -33,7 +35,8 @@ namespace IISLogAnalyzer.Controllers
         {
             var resultsModel = new AnalyzerResultModel();
             var recordsToRetrive = GetPageRecordCount();
-            var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
+            //var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
+            var logFilePath = GetLogPath("wagamama.local");
 
             try
             {
@@ -157,6 +160,24 @@ namespace IISLogAnalyzer.Controllers
                     break;
             }
             return logTypeClass;
+        }
+
+        private string GetLogPath(string siteName)
+        {
+            ServerManager manager = new ServerManager();
+            var mySite = manager.Sites[siteName];
+
+            if (mySite == null)
+            {
+                return string.Empty;
+            }
+
+            var logPath = mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
+            foreach (string file in Directory.EnumerateFiles(logPath, "*.log"))
+            {
+                string contents = System.IO.File.ReadAllText(logPath);
+            }
+            return mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
         }
     }
 }
