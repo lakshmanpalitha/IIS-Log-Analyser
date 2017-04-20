@@ -36,7 +36,8 @@ namespace IISLogAnalyzer.Controllers
             var resultsModel = new AnalyzerResultModel();
             var recordsToRetrive = GetPageRecordCount();
             //var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
-            var logFilePath = GetLogPath("wagamama.local");
+            var siteName = System.Web.Hosting.HostingEnvironment.ApplicationHost.GetSiteName();
+            var logFilePath = GetLogPath(siteName);
 
             try
             {
@@ -173,11 +174,25 @@ namespace IISLogAnalyzer.Controllers
             }
 
             var logPath = mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
+
+            if (Directory.Exists(logPath))
+            {
+                return mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
+            }
+
+            return string.Empty;
+        }
+
+        private string ReadLogs(string logPath)
+        {
+            var logRecords = string.Empty;
+
             foreach (string file in Directory.EnumerateFiles(logPath, "*.log"))
             {
-                string contents = System.IO.File.ReadAllText(logPath);
+                 logRecords = System.IO.File.ReadAllText(logPath);
             }
-            return mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
+
+            return logRecords;
         }
     }
 }
