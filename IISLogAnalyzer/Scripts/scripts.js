@@ -8,13 +8,16 @@
             var path = $("#txtLogFilePath").val(),
                 query = $('.query-editor-container').simpleIntellisense('getValue'),
                 logType = $("#dropLogType").val(),
+                fromDate = $("#from").val(),
+                toDate = $("#to").val(),
                 $loader = $('.loading');
+
            $loader.show();
 
 	        $.ajax({
 	            type: 'POST',
 	            url: "/LogAnalyzer/Index",
-	            data: { query: query, logType: logType, numberOfExistingRecords: 0 },
+	            data: { query: query, logType: logType, numberOfExistingRecords: 0, fromDate: fromDate, toDate: toDate },
 	            success: function (data) {
 	                $("#results").html(data);
 	                $loader.show();
@@ -24,7 +27,7 @@
 
 
         $(function () {
-            var dateFormat = "mm/dd/yy",
+            var dateFormat = "mm-dd-yy",
                 from = $("#from")
                     .datepicker({
                         defaultDate: "+1w",

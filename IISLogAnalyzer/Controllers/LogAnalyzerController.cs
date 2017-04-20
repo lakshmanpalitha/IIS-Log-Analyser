@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using MSUtil;
 using Microsoft.Web.Administration;
 using System.IO;
+using Microsoft.SqlServer.Server;
 
 namespace IISLogAnalyzer.Controllers
 {
@@ -31,20 +32,20 @@ namespace IISLogAnalyzer.Controllers
 
         // GET: LogAnalyzer
         [HttpPost]
-        public ActionResult Index(string query, string logType, int numberOfExistingRecords)
+        public ActionResult Index(string query, string logType, int numberOfExistingRecords, string fromDate, string toDate)
         {
             var resultsModel = new AnalyzerResultModel();
             var recordsToRetrive = GetPageRecordCount();
             //var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
             var siteName = System.Web.Hosting.HostingEnvironment.ApplicationHost.GetSiteName();
-            var logFilePath = GetLogPath(siteName);
+            var logFilePath = GetLogPath("wagamama.local");
 
             try
             {
                 var stopWatch = new Stopwatch();
 
                 stopWatch.Start();
-                var resultsTable = ParseW3CLog(logFilePath, query, logType);
+                var resultsTable = ParseW3CLog(logFilePath, query, logType, fromDate, toDate);
 
                 if (recordsToRetrive < 0 || resultsTable.Rows.Count <= numberOfExistingRecords)
                 {
@@ -82,14 +83,14 @@ namespace IISLogAnalyzer.Controllers
             
         }
 
-        public DataTable ParseW3CLog(string path, string query, string logType)
+        public DataTable ParseW3CLog(string path, string query, string logType, string fromDate, string toDate)
         {
             var logParser = new LogQueryClass();
 
             var recordsTable = new DataTable();
             var columns = new List<string>();
 
-            var strSql = BuildQuery(path, query);
+            var strSql = BuildQuery(path, query, fromDate, toDate);
 
             var recordSet = logParser.Execute(strSql, GetLogTypeClass(logType));
 
@@ -116,10 +117,8 @@ namespace IISLogAnalyzer.Controllers
             return recordsTable;
         }
 
-        public string BuildQuery(string path, string query, string toDate = "", string fromDate = "")
+        public string BuildQuery(string path, string query, string toDate, string fromDate)
         {
-            string finalQuery;
-
             if (string.IsNullOrEmpty(query))
             {
                 throw new Exception("Please provide the query");
@@ -130,16 +129,16 @@ namespace IISLogAnalyzer.Controllers
                 throw new Exception("Please provide log file path");
             }
 
-            finalQuery = query.Replace("{path}", path);
+            var finalQuery = query.Replace("{path}", path+ "\\*.log");
 
-            if (!string.IsNullOrEmpty(toDate))
+            if (!finalQuery.Contains("{Date}"))
             {
-
+                return finalQuery;
             }
 
-            if (!string.IsNullOrEmpty(fromDate))
+            if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
             {
-
+                finalQuery = finalQuery.Replace("{Date}", "Date > " + fromDate + " and  Date < " + toDate);
             }
 
             return finalQuery;
@@ -175,24 +174,12 @@ namespace IISLogAnalyzer.Controllers
 
             var logPath = mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
 
-            if (Directory.Exists(logPath))
-            {
-                return mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
-            }
+            //if (Directory.Exists(logPath))
+            //{
+            //    return mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
+            //}
 
-            return string.Empty;
-        }
-
-        private string ReadLogs(string logPath)
-        {
-            var logRecords = string.Empty;
-
-            foreach (string file in Directory.EnumerateFiles(logPath, "*.log"))
-            {
-                 logRecords = System.IO.File.ReadAllText(logPath);
-            }
-
-            return logRecords;
+            return logPath;
         }
     }
 }
