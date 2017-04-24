@@ -32,7 +32,7 @@ namespace IISLogAnalyzer.Controllers
 
         // GET: LogAnalyzer
         [HttpPost]
-        public ActionResult Index(string query, string logType, int numberOfExistingRecords, string fromDate, string toDate)
+        public ActionResult Index(string query, string logType, int numberOfExistingRecords, string fromDate, string toDate, string fromTime, string toTime)
         {
             var resultsModel = new AnalyzerResultModel();
             var recordsToRetrive = GetPageRecordCount();
@@ -45,7 +45,7 @@ namespace IISLogAnalyzer.Controllers
                 var stopWatch = new Stopwatch();
 
                 stopWatch.Start();
-                var resultsTable = ParseW3CLog(logFilePath, query, logType, fromDate, toDate);
+                var resultsTable = ParseW3CLog(logFilePath, query, logType, fromDate, toDate, fromTime, toTime);
 
                 if (recordsToRetrive < 0 || resultsTable.Rows.Count <= numberOfExistingRecords)
                 {
@@ -83,14 +83,14 @@ namespace IISLogAnalyzer.Controllers
             
         }
 
-        public DataTable ParseW3CLog(string path, string query, string logType, string fromDate, string toDate)
+        public DataTable ParseW3CLog(string path, string query, string logType, string fromDate, string toDate, string fromTime, string toTime)
         {
             var logParser = new LogQueryClass();
 
             var recordsTable = new DataTable();
             var columns = new List<string>();
 
-            var strSql = BuildQuery(path, query, fromDate, toDate);
+            var strSql = BuildQuery(path, query, fromDate, toDate,fromTime, toTime);
 
             var recordSet = logParser.Execute(strSql, GetLogTypeClass(logType));
 
@@ -109,6 +109,17 @@ namespace IISLogAnalyzer.Controllers
 
                 foreach (var column in columns)
                 {
+                    if (column.Contains("time") && row.getValue(column).GetType().Equals(typeof(DateTime)))
+                    {
+                        newTableRow[column] = row.getValue(column)?.ToString("HH:mm:ss");
+                        continue;
+                    }
+
+                    if (column.Contains("date") && row.getValue(column).GetType().Equals(typeof(DateTime)))
+                    {
+                        newTableRow[column] = row.getValue(column)?.ToString("dd/MM/yyyy");
+                        continue;
+                    }
                     newTableRow[column] = row.getValue(column)?.ToString();
                 }
 
@@ -117,7 +128,7 @@ namespace IISLogAnalyzer.Controllers
             return recordsTable;
         }
 
-        public string BuildQuery(string path, string query, string toDate, string fromDate)
+        public string BuildQuery(string path, string query, string fromDate , string toDate, string fromTime, string toTime)
         {
             if (string.IsNullOrEmpty(query))
             {
@@ -138,7 +149,13 @@ namespace IISLogAnalyzer.Controllers
 
             if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
             {
-                finalQuery = finalQuery.Replace("{Date}", "Date > " + fromDate + " and  Date < " + toDate);
+                finalQuery = finalQuery.Replace("{Date}", "Date >= '" + fromDate + "' and  Date <= '" + toDate + "'");
+            }
+
+            if (!string.IsNullOrEmpty(fromTime) && !string.IsNullOrEmpty(toTime))
+            {
+                //finalQuery = finalQuery.Replace("{time}", "time >= '" + fromTime + "' and  time <= '" + toTime + "'");
+                finalQuery = finalQuery.Replace("{time}", "time >= '" + fromTime + "' and  time <= '" + toTime + "'");
             }
 
             return finalQuery;
