@@ -38,7 +38,7 @@ namespace IISLogAnalyzer.Controllers
             var recordsToRetrive = GetPageRecordCount();
             //var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
             var siteName = System.Web.Hosting.HostingEnvironment.ApplicationHost.GetSiteName();
-            var logFilePath = GetLogPath("wagamama.local");
+            var logFilePath = GetLogPath("iiss.local");
 
             try
             {
@@ -183,13 +183,13 @@ namespace IISLogAnalyzer.Controllers
         {
             ServerManager manager = new ServerManager();
             var mySite = manager.Sites[siteName];
-
+            var logPath = @"C:\Users\sas\Desktop\IISS\CD2\IIS";
             if (mySite == null)
             {
-                return string.Empty;
+                return logPath;
             }
 
-            var logPath = mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
+            logPath = mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
 
             //if (Directory.Exists(logPath))
             //{

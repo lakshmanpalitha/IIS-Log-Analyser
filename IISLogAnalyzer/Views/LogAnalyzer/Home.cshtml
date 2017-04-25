@@ -5,34 +5,42 @@
 <div class="wrapper">
     <div class="query-editor-holder">
         <div class="title">
-            <h1>Query</h1>
+            <h1>IIS log analyzer</h1>
         </div>
-        <div class="query-editor-container">
-            
-        </div>
-        <div class="form-block">
-            <select id="dropLogType">
-                <option selected="">Please Select a Log</option>
-                <option value="W3LOG">W3LOG</option>
-                <option value="IISLOG">IISLOG</option>
-            </select>
-        </div>
-        
-        <div class="form-block">
-            <input id="from" type="text" class="date-from" placeholder="Date From" />
-            <input id="timeFrom" type="text" placeholder="Time From (hh:mm:ss)" maxlength="8" />
-            <input id="to" type="text" class="date-to" placeholder="Date To" />
-            <input id="timeTo" type="text" placeholder="Time To (hh:mm:ss)" maxlength="8" />
-        </div>
-       
+        <section class="left">
+            <div class="query-editor-container">
 
-        <div class="button-section">
-            <button id="btnQuery" class="run-query" type="button">Run</button>
-        </div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="form-block">
+                <div class="form-block-row">
+                    <input id="from" type="text" class="date-from" placeholder="Date From" />
+                    <input id="timeFrom" type="text" placeholder="Time From (hh:mm:ss)" maxlength="8" />
+                </div>
+                <div class="form-block-row">
+                    <input id="to" type="text" class="date-to" placeholder="Date To" />
+                    <input id="timeTo" type="text" placeholder="Time To (hh:mm:ss)" maxlength="8" />
+                </div>
+                <div class="form-block-row">
+                    <select id="dropLogType">
+                        <option selected="">Log Type</option>
+                        <option value="W3LOG">W3LOG</option>
+                        <option value="IISLOG">IISLOG</option>
+                    </select>
+                </div>
+                <div class="button-section form-block-row">
+                    <button id="btnSelectQuery" class="select-query" type="button">Select Query</button>
+                    <button id="btnQuery" class="run-query" type="button">Run</button>
+                </div>
+            </div>
+        </section>
     </div>
+
     <div id="results" class="query-result-holder">
         <div class="loading"><img src="~/Content/loading.gif" /></div>
     </div>
 </div>
+
 
 
