@@ -1,0 +1,4 @@
+<root>
+<name>Select Top 10</name>
+<query>SELECT TOP 10 * FROM {path}</query>
+</root>

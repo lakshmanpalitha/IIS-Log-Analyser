@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using MSUtil;
 using Microsoft.Web.Administration;
 using System.IO;
+using System.Xml;
 using Microsoft.SqlServer.Server;
 
 namespace IISLogAnalyzer.Controllers
@@ -34,6 +35,8 @@ namespace IISLogAnalyzer.Controllers
         [HttpPost]
         public ActionResult Index(string query, string logType, int numberOfExistingRecords, string fromDate, string toDate, string fromTime, string toTime)
         {
+            GetPredefinedQueries();
+
             var resultsModel = new AnalyzerResultModel();
             var recordsToRetrive = GetPageRecordCount();
             //var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
@@ -197,6 +200,33 @@ namespace IISLogAnalyzer.Controllers
             //}
 
             return logPath;
+        }
+
+
+        [HttpGet]
+        public JsonResult GetPredefinedQueries()
+        {
+            var path = @"D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\Queries";
+            var queiriesDictionary = new Dictionary<string,string>();
+            try
+            {
+                if (Directory.Exists(path))
+                {
+                    foreach (var file in Directory.EnumerateFiles(path, "*.xml"))
+                    {
+                        var xmlDoc = new XmlDocument();
+                        xmlDoc.Load(file);
+                        var name = xmlDoc.GetElementsByTagName("name")[0].InnerText;
+                        var query = xmlDoc.GetElementsByTagName("query")[0].InnerText;
+                        queiriesDictionary.Add(name, query);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+            return Json(queiriesDictionary,JsonRequestBehavior.AllowGet);    
         }
     }
 }

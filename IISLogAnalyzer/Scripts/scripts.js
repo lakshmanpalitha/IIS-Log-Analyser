@@ -38,7 +38,22 @@
             });
         });
 
-
+        $(function () {
+            $.ajax({
+                type: 'Get',
+                url: '/LogAnalyzer/GetPredefinedQueries',
+                success: function (data) {
+                    $.each(data, function(name, query) {
+                        console.log(name);
+                        console.log(query);
+                        console.log("---------------------------------------------");
+                    });
+                },
+                error: function(data) {
+                    
+                }
+            });
+        });
 
     });
 
