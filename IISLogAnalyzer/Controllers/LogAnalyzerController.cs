@@ -5,6 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using MSUtil;
+using Microsoft.Web.Administration;
+using System.IO;
+using System.Xml;
+using Microsoft.SqlServer.Server;
 
 namespace IISLogAnalyzer.Controllers
 {
@@ -29,18 +33,22 @@ namespace IISLogAnalyzer.Controllers
 
         // GET: LogAnalyzer
         [HttpPost]
-        public ActionResult Index(string query, string logType, int numberOfExistingRecords)
+        public ActionResult Index(string query, string logType, int numberOfExistingRecords, string fromDate, string toDate, string fromTime, string toTime)
         {
+            GetPredefinedQueries();
+
             var resultsModel = new AnalyzerResultModel();
             var recordsToRetrive = GetPageRecordCount();
-            var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
+            //var logFilePath = System.Configuration.ConfigurationManager.AppSettings["logFilePath"];
+            var siteName = System.Web.Hosting.HostingEnvironment.ApplicationHost.GetSiteName();
+            var logFilePath = GetLogPath("iiss.local");
 
             try
             {
                 var stopWatch = new Stopwatch();
 
                 stopWatch.Start();
-                var resultsTable = ParseW3CLog(logFilePath, query, logType);
+                var resultsTable = ParseW3CLog(logFilePath, query, logType, fromDate, toDate, fromTime, toTime);
 
                 if (recordsToRetrive < 0 || resultsTable.Rows.Count <= numberOfExistingRecords)
                 {
@@ -78,14 +86,14 @@ namespace IISLogAnalyzer.Controllers
             
         }
 
-        public DataTable ParseW3CLog(string path, string query, string logType)
+        public DataTable ParseW3CLog(string path, string query, string logType, string fromDate, string toDate, string fromTime, string toTime)
         {
             var logParser = new LogQueryClass();
 
             var recordsTable = new DataTable();
             var columns = new List<string>();
 
-            var strSql = BuildQuery(path, query);
+            var strSql = BuildQuery(path, query, fromDate, toDate,fromTime, toTime);
 
             var recordSet = logParser.Execute(strSql, GetLogTypeClass(logType));
 
@@ -104,6 +112,17 @@ namespace IISLogAnalyzer.Controllers
 
                 foreach (var column in columns)
                 {
+                    if (column.Contains("time") && row.getValue(column).GetType().Equals(typeof(DateTime)))
+                    {
+                        newTableRow[column] = row.getValue(column)?.ToString("HH:mm:ss");
+                        continue;
+                    }
+
+                    if (column.Contains("date") && row.getValue(column).GetType().Equals(typeof(DateTime)))
+                    {
+                        newTableRow[column] = row.getValue(column)?.ToString("dd/MM/yyyy");
+                        continue;
+                    }
                     newTableRow[column] = row.getValue(column)?.ToString();
                 }
 
@@ -112,10 +131,8 @@ namespace IISLogAnalyzer.Controllers
             return recordsTable;
         }
 
-        public string BuildQuery(string path, string query, string toDate = "", string fromDate = "")
+        public string BuildQuery(string path, string query, string fromDate , string toDate, string fromTime, string toTime)
         {
-            var finalQuery = string.Empty;
-
             if (string.IsNullOrEmpty(query))
             {
                 throw new Exception("Please provide the query");
@@ -126,16 +143,22 @@ namespace IISLogAnalyzer.Controllers
                 throw new Exception("Please provide log file path");
             }
 
-            finalQuery = query.Replace("{path}", path);
+            var finalQuery = query.Replace("{path}", path+ "\\*.log");
 
-            if (!string.IsNullOrEmpty(toDate))
+            if (!finalQuery.Contains("{Date}"))
             {
-
+                return finalQuery;
             }
 
-            if (!string.IsNullOrEmpty(fromDate))
+            if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
             {
+                finalQuery = finalQuery.Replace("{Date}", "Date >= '" + fromDate + "' and  Date <= '" + toDate + "'");
+            }
 
+            if (!string.IsNullOrEmpty(fromTime) && !string.IsNullOrEmpty(toTime))
+            {
+                //finalQuery = finalQuery.Replace("{time}", "time >= '" + fromTime + "' and  time <= '" + toTime + "'");
+                finalQuery = finalQuery.Replace("{time}", "time >= '" + fromTime + "' and  time <= '" + toTime + "'");
             }
 
             return finalQuery;
@@ -157,6 +180,53 @@ namespace IISLogAnalyzer.Controllers
                     break;
             }
             return logTypeClass;
+        }
+
+        private string GetLogPath(string siteName)
+        {
+            ServerManager manager = new ServerManager();
+            var mySite = manager.Sites[siteName];
+            var logPath = @"C:\Users\sas\Desktop\IISS\CD2\IIS";
+            if (mySite == null)
+            {
+                return logPath;
+            }
+
+            logPath = mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
+
+            //if (Directory.Exists(logPath))
+            //{
+            //    return mySite.LogFile.Directory + "\\W3svc" + mySite.Id.ToString();
+            //}
+
+            return logPath;
+        }
+
+
+        [HttpGet]
+        public JsonResult GetPredefinedQueries()
+        {
+            var path = @"D:\Projects\IIS-Log-Analyser\IISLogAnalyzer\Queries";
+            var queiriesDictionary = new Dictionary<string,string>();
+            try
+            {
+                if (Directory.Exists(path))
+                {
+                    foreach (var file in Directory.EnumerateFiles(path, "*.xml"))
+                    {
+                        var xmlDoc = new XmlDocument();
+                        xmlDoc.Load(file);
+                        var name = xmlDoc.GetElementsByTagName("name")[0].InnerText;
+                        var query = xmlDoc.GetElementsByTagName("query")[0].InnerText;
+                        queiriesDictionary.Add(name, query);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+            return Json(queiriesDictionary,JsonRequestBehavior.AllowGet);    
         }
     }
 }

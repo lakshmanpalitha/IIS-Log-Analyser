@@ -76,6 +76,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Administration.7.0.0.0\lib\net20\Microsoft.Web.Administration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MSUtil">
       <HintPath>dll\MSUtil.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -137,7 +141,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\scripts.js" />
     <Content Include="Scripts\simple-intellisense.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\LogAnalyzer\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
